@@ -18,7 +18,22 @@ function divide(a, b) {
     return a / b;
 }
 
-console.log(add(4, 5));
-console.log(subtract(10, 4));
-console.log(multiply(18, 8));
-console.log(divide(64, 8));
+function operate(operator, num1, num2) {
+    if(operator === '+') {
+        return add(num1, num2);
+    } else if(operator === '-') {
+        return subtract(num1, num2);
+    } else if(operator === '*') {
+        return multiply(num1, num2);
+    } else if(operator === '/') {
+        return divide(num1, num2);
+    } else {
+        return "Invalid operator";
+    }
+}
+
+console.log(operate('+', 4, 5));
+console.log(operate('-', 10, 4));
+console.log(operate('*', 18, 8));
+console.log(operate('/', 64, 8));
+console.log(operate('$', 12, 6));
