@@ -37,3 +37,22 @@ console.log(operate('-', 10, 4));
 console.log(operate('*', 18, 8));
 console.log(operate('/', 64, 8));
 console.log(operate('$', 12, 6));
+
+const display = document.getElementById('display');
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach(button => {
+    const value = button.textContent;
+
+    if(!isNaN(value)) {
+        button.addEventListener('click', () => {
+            display.value += value;
+        });
+    }
+
+    if(value === 'clear') {
+        button.addEventListener('click', () => {
+            display.value = "";
+        });
+    }
+});
