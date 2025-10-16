@@ -122,6 +122,21 @@ buttons.forEach(button => {
                 justCalculated = true;
             }
         }
+
+        // Percentage
+        if (value === '%') {
+            if (num1 !== '' && num2 === '' && operator === '') {
+                // Only num1 exists, convert to percent
+                num1 = (parseFloat(num1) / 100).toString();
+                display.value = num1;
+            } else if (num1 !== '' && num2 !== '') {
+                // Apply percent relative to num1
+                num2 = (parseFloat(num1) * parseFloat(num2) / 100).toString();
+                display.value = num1 + operator + num2;
+            }
+            return;
+        }
+
     });
 });
 
