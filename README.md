@@ -14,8 +14,6 @@ Inspired by the iPhone calculator UI (yeah, I copied the look 😅).
 - `AC` clears everything, `DEL` backspaces
 - Stretched `0` button and a subtle home indicator for the Apple vibe
 
----
-
 ## Notes / Design choices
 - I tried to match the iPhone calculator feel — layout, button sizes, operator color, and the tiny home indicator.  
 - `%` behavior follows the typical calculator convention (relative percent for the second number).  
@@ -31,8 +29,6 @@ Feel free to fork it and play around with styles or add new features
 
 ## Author
 made by **bharadwaja2711** a Samsung user 😅
-
----
 
 ## License
 This project is free to use. Credit would be appreciated but not required. ✌️
