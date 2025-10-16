@@ -1,58 +1,73 @@
-let num1 = 3;
-let operator = '+';
-let num2 = 5;
-
-function add(a, b) {
-    return a + b;
-}
-
-function subtract(a, b) {
-    return a - b;
-}
-
-function multiply(a, b) {
-    return a * b;
-}
-
-function divide(a, b) {
-    return a / b;
-}
-
-function operate(operator, num1, num2) {
-    if(operator === '+') {
-        return add(num1, num2);
-    } else if(operator === '-') {
-        return subtract(num1, num2);
-    } else if(operator === '*') {
-        return multiply(num1, num2);
-    } else if(operator === '/') {
-        return divide(num1, num2);
-    } else {
-        return "Invalid operator";
-    }
-}
-
-console.log(operate('+', 4, 5));
-console.log(operate('-', 10, 4));
-console.log(operate('*', 18, 8));
-console.log(operate('/', 64, 8));
-console.log(operate('$', 12, 6));
+let num1 = '';
+let num2 = '';
+let operator = '';
+let result = '';
 
 const display = document.getElementById('display');
 const buttons = document.querySelectorAll('button');
 
 buttons.forEach(button => {
-    const value = button.textContent;
+    button.addEventListener('click', () => {
+        const value = button.textContent;
 
-    if(!isNaN(value)) {
-        button.addEventListener('click', () => {
+        // Handle clear
+        if (value === 'clear') {
+            num1 = '';
+            num2 = '';
+            operator = '';
+            display.value = '';
+            return;
+        }
+
+        // Handle numbers
+        if (!isNaN(value)) {
+            if (operator === '') {
+                num1 += value; // still entering first number
+            } else {
+                num2 += value; // now entering second number
+            }
             display.value += value;
-        });
-    }
+            return;
+        }
 
-    if(value === 'clear') {
-        button.addEventListener('click', () => {
-            display.value = "";
-        });
-    }
+        // Handle operators (+, -, *, /)
+        if (['+', '-', '*', '/'].includes(value)) {
+            if (num1 === '') return; // can't have operator before number
+            if (operator !== '' && num2 !== '') {
+                // If user chains operations (e.g. 5 + 3 + 2)
+                num1 = operate(operator, +num1, +num2).toString();
+                num2 = '';
+            }
+            operator = value;
+            display.value += value;
+            return;
+        }
+
+        // Handle equals (=)
+        if (value === '=') {
+            if (num1 !== '' && operator !== '' && num2 !== '') {
+                result = operate(operator, +num1, +num2);
+                display.value = result;
+                // reset for next operation
+                num1 = result.toString();
+                num2 = '';
+                operator = '';
+            }
+        }
+    });
 });
+
+function add(a, b) { return a + b; }
+function subtract(a, b) { return a - b; }
+function multiply(a, b) { return a * b; }
+function divide(a, b) { return b === 0 ? 'Error' : a / b; }
+
+function operate(operator, a, b) {
+    switch (operator) {
+        case '+': return add(a, b);
+        case '-': return subtract(a, b);
+        case '*': return multiply(a, b);
+        case '/': return divide(a, b);
+        default: return 'Invalid';
+    }
+}
