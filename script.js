@@ -12,7 +12,7 @@ buttons.forEach(button => {
         const value = button.textContent;
 
         // Clear button
-        if (value === 'clear') {
+        if (value === 'AC') {
             num1 = '';
             num2 = '';
             operator = '';
@@ -22,7 +22,7 @@ buttons.forEach(button => {
         }
 
         // Backspace button
-        if (value === 'backspace') {
+        if (value === 'DEL') {
             if (justCalculated) {
                 // Clear result if backspace pressed after calculation
                 num1 = '';
@@ -85,7 +85,7 @@ buttons.forEach(button => {
         }
 
         // Operators
-        if (['+', '-', '*', '/'].includes(value)) {
+        if (['+', '-', 'x', '/'].includes(value)) {
             if (num1 === '') return;
 
             if (operator !== '' && num2 === '') {
@@ -135,7 +135,7 @@ function operate(op, a, b) {
     switch(op) {
         case '+': return add(a, b);
         case '-': return subtract(a, b);
-        case '*': return multiply(a, b);
+        case 'x': return multiply(a, b);
         case '/': return divide(a, b);
         default: return 'Invalid';
     }
