@@ -5,6 +5,7 @@ let justCalculated = false;
 
 const display = document.getElementById('display');
 const buttons = document.querySelectorAll('button');
+const decimalButton = Array.from(buttons).find(b => b.textContent === '.');
 
 buttons.forEach(button => {
     button.addEventListener('click', () => {
@@ -17,23 +18,19 @@ buttons.forEach(button => {
             operator = '';
             display.value = '';
             justCalculated = false;
+            decimalButton.disabled = false; // enable decimal button again
             return;
         }
 
-        // Number or decimal
-        if (!isNaN(value) || value === '.') {
-            // Start fresh if just calculated
+        // Number
+        if (!isNaN(value)) {
             if (justCalculated) {
+                // Start new calculation
                 num1 = '';
                 operator = '';
                 num2 = '';
                 display.value = '';
                 justCalculated = false;
-            }
-
-            // Prevent multiple decimals
-            if (value === '.' && ((operator === '' && num1.includes('.')) || (operator !== '' && num2.includes('.')))) {
-                return;
             }
 
             if (operator === '') {
@@ -45,20 +42,36 @@ buttons.forEach(button => {
             return;
         }
 
-        // Operators (+, -, *, /)
-        if (['+', '-', '*', '/'].includes(value)) {
-            if (num1 === '') return; // cannot start with operator
+        // Decimal point
+        if (value === '.') {
+            if (operator === '') {
+                // num1 decimal
+                if (!num1.includes('.')) {
+                    num1 += '.';
+                    display.value += '.';
+                }
+            } else {
+                // num2 decimal
+                if (!num2.includes('.')) {
+                    num2 += '.';
+                    display.value += '.';
+                }
+            }
+            return;
+        }
 
-            // Replace operator if consecutive operators pressed
+        // Operator
+        if (['+', '-', '*', '/'].includes(value)) {
+            if (num1 === '') return;
+
+            // Replace operator if consecutive pressed
             if (operator !== '' && num2 === '') {
-                // Remove last operator from display
                 display.value = display.value.slice(0, -1);
                 operator = value;
                 display.value += value;
                 return;
             }
 
-            // Evaluate previous pair if both numbers exist
             if (operator !== '' && num2 !== '') {
                 let result = operate(operator, parseFloat(num1), parseFloat(num2));
                 result = roundResult(result);
@@ -73,7 +86,7 @@ buttons.forEach(button => {
             return;
         }
 
-        // Equals button
+        // Equals
         if (value === '=') {
             if (num1 !== '' && operator !== '' && num2 !== '') {
                 let result = operate(operator, parseFloat(num1), parseFloat(num2));
@@ -107,7 +120,7 @@ function operate(op, a, b) {
 // Round long decimals
 function roundResult(res) {
     if (typeof res === 'number') {
-        return parseFloat(res.toFixed(8)); // 8 decimal places max
+        return parseFloat(res.toFixed(8));
     }
-    return res; // for divide by 0 error string
+    return res;
 }
