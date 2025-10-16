@@ -18,14 +18,40 @@ buttons.forEach(button => {
             operator = '';
             display.value = '';
             justCalculated = false;
-            decimalButton.disabled = false; // enable decimal button again
+            return;
+        }
+
+        // Backspace button
+        if (value === 'backspace') {
+            if (justCalculated) {
+                // Clear result if backspace pressed after calculation
+                num1 = '';
+                num2 = '';
+                operator = '';
+                display.value = '';
+                justCalculated = false;
+                return;
+            }
+
+            const lastChar = display.value.slice(-1);
+            display.value = display.value.slice(0, -1);
+
+            if (operator && num2) {
+                // Removing from num2
+                num2 = num2.slice(0, -1);
+            } else if (operator && !num2) {
+                // Removing operator
+                operator = '';
+            } else {
+                // Removing from num1
+                num1 = num1.slice(0, -1);
+            }
             return;
         }
 
         // Number
         if (!isNaN(value)) {
             if (justCalculated) {
-                // Start new calculation
                 num1 = '';
                 operator = '';
                 num2 = '';
@@ -45,13 +71,11 @@ buttons.forEach(button => {
         // Decimal point
         if (value === '.') {
             if (operator === '') {
-                // num1 decimal
                 if (!num1.includes('.')) {
                     num1 += '.';
                     display.value += '.';
                 }
             } else {
-                // num2 decimal
                 if (!num2.includes('.')) {
                     num2 += '.';
                     display.value += '.';
@@ -60,12 +84,12 @@ buttons.forEach(button => {
             return;
         }
 
-        // Operator
+        // Operators
         if (['+', '-', '*', '/'].includes(value)) {
             if (num1 === '') return;
 
-            // Replace operator if consecutive pressed
             if (operator !== '' && num2 === '') {
+                // Replace operator
                 display.value = display.value.slice(0, -1);
                 operator = value;
                 display.value += value;
